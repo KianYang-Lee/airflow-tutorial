@@ -1,17 +1,21 @@
+
+"""
+My second dag.
+"""
+
 from datetime import datetime, timedelta
 from textwrap import dedent
 
-# The DAG object; we'll need this to instantiate a DAG
+# Step 1: Import libraries
 from airflow import DAG
-
-# Operators; we need this to operate!
 from airflow.operators.bash import BashOperator
-# These args will get passed on to each operator
-# You can override them on a per-task basis during operator initialization
+
+# Step 2: Configure default arguments
+#   These args will get passed on to each operator and can be overrided
 default_args = {
     'owner': 'Kian Yang Lee',
     'depends_on_past': False,
-    'email': ['airflow@example.com'],
+    'email': ['kianyang.lee@certifai.ai'],
     'email_on_failure': False,
     'email_on_retry': False,
     'retries': 1,
@@ -30,6 +34,8 @@ default_args = {
     # 'sla_miss_callback': yet_another_function,
     # 'trigger_rule': 'all_success'
 }
+
+# Step 3: Instantiate DAG object
 with DAG(
     'my_second_dag',
     default_args=default_args,
@@ -40,19 +46,21 @@ with DAG(
     tags=['example'],
 ) as dag:
 
-    # t1, t2 and t3 are examples of tasks created by instantiating operators
-    t1 = BashOperator(
+
+    # Step 4: Configure tasks by instantiating operators
+    #   An object instantiated from operators is called a task
+    task_1 = BashOperator(
         task_id='print_date',
         bash_command='date',
     )
 
-    t2 = BashOperator(
+    task_2 = BashOperator(
         task_id='sleep',
         depends_on_past=False,
         bash_command='sleep 5',
         retries=3,
     )
-    t1.doc_md = dedent(
+    task_1.doc_md = dedent(
         """\
     #### Task Documentation
     You can document your task using the attributes `doc_md` (markdown),
@@ -63,10 +71,12 @@ with DAG(
     """
     )
 
-    dag.doc_md = __doc__  # providing that you have a docstring at the beginning of the DAG
+    dag.doc_md = __doc__  # Display docstring at the beginning of module
     dag.doc_md = """
-    This is a documentation placed anywhere
-    """  # otherwise, type it like this
+    This is a documentation placed at the middle of module.
+    """  # otherwise, specify it this way
+    
+    # Jinja templating
     templated_command = dedent(
         """
     {% for i in range(5) %}
@@ -77,11 +87,14 @@ with DAG(
     """
     )
 
-    t3 = BashOperator(
-        task_id='templated',
+    task_3 = BashOperator(
+        task_id='Jinja_template',
         depends_on_past=False,
         bash_command=templated_command,
-        params={'my_param': 'Parameter I passed in'},
+        params={'my_param': 'My params are awesome'},
     )
 
-    t1 >> [t2, t3]
+    # Step 5: Configure tasks dependencies
+    # This is also equivalent to:
+    # task_1 >> [task_2, task_3]
+    task_1.set_downstream([task_2, task_3])

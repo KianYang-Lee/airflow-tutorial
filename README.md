@@ -10,10 +10,11 @@ Contains tutorial on getting started in using Apache Airflow to automate pipelin
   1. [Import libraries](#step-1-import-libraries)
   2. [Configure default arguments](#step-2-configure-default-arguments)
   3. [Instantiate DAG object](#step-3-instantiate-dag-object)
-  4. [Configure tasks for individual DAG object](#step-4-configure-tasks-for-individual-dag-object)
+  4. [Configure tasks by instantiating operators](#step-4-configure-tasks-by-instantiating-operators)
   5. [Configure tasks dependencies](#step-5-configure-tasks-dependencies)
 - [Execute DAGs](#execute-dags)
 - [Monitor Workflow Using Airflow UI](#monitor-workflow-using-airflow-ui)
+- [Interact with Docker Container](#interact-with-docker-container)
 - [References](#references)
 
 ## Introduction to Apache Airflow
@@ -57,11 +58,11 @@ Alternatively, you can install it via PyPi by following the instructions [here](
 ## Write an Airflow DAG
 DAG stands for directed acyclic graph, which is a collection of tasks which constitute a pipeline/workflow. The steps below are required to construct a DAG.
 
-### Step 1: Import Libraries
-### Step 2: Configure default arguments
-### Step 3: Instantiate DAG object
-### Step 4: Configure tasks for individual DAG object
-### Step 5: Configure tasks dependencies
+- Step 1: Import Libraries
+- Step 2: Configure default arguments
+- Step 3: Instantiate DAG object
+- Step 4: Configure tasks by instantiating operators
+- Step 5: Configure tasks dependencies
 
 ## Execute DAGs
 
@@ -76,6 +77,20 @@ The UI will display the execution status after that.
 To check out on the details of tasks, click on the task shape in the UI.
 
 Then, select the details which you would like to check out. Log and graph are among useful details which you should check out.
+
+## Interact with Docker Container
+
+You might want to interact with the Airflow environment. To do so, execute the following and copy the container ID for airflow-worker service:
+
+```docker ps```
+
+Then run the following to get a bash terminal (remember to replace the right container ID):
+
+```docker exec -it <CONTAINER_ID> bash```
+
+You can then inspect the environment, for example we check all the DAGs available by:
+
+```ls -ltr dags/```
 
 ## References
 - [Airflow tutorial 4: Writing your first pipeline](https://www.youtube.com/watch?v=43wHwwZhJMo)
