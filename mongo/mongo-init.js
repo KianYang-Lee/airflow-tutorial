@@ -9,6 +9,8 @@ db.createUser({
   ],
 });
 
+db = db.getSiblingDB('the_database');
+
 db.createCollection('jokes');
 
 db.jokes.insert({

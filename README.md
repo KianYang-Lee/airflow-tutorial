@@ -23,17 +23,20 @@ A slide deck which provides brief introduction on what is Apache Airflow, why us
 ## Getting Started
 We are going to use Docker containers to spin up Airflow container as we also need to spin up container for other services. Follow the steps below to get Apache Airflow up and running using Docker container:
 
-1. Clone this repo
-2. Configure host user id
-```
-echo -e "AIRFLOW_UID=$(id -u)\n_PIP_ADDITIONAL_REQUIREMENTS=pymongo pandas scikit-learn apache-airflow-providers-mongo" > .env
+1. Clone this repo.
+2. Configure host user id, additional Python packages and directories:
+
+```sh
+echo -e "AIRFLOW_UID=$(id -u)\n_PIP_ADDITIONAL_REQUIREMENTS=pymongo pandas scikit-learn apache-airflow-providers-mongo" > .env && mkdir -p dags logs plugins
 ```
 
-3. Initialize the database and create first user account
-```docker-compose up airflow-init```
+3. Initialize the database and create first user account:
+```sh
+docker-compose up airflow-init
+```
 
 You should see similar message as below that indicates success execution:
-```
+```sh
 airflow-init_1       | User "airflow" created with role "Admin"
 airflow-init_1       | 2.2.0
 airflow-tutorial_airflow-init_1 exited with code 0
@@ -92,7 +95,9 @@ Then run the following to get a bash terminal (remember to replace the right con
 
 You can then inspect the environment, for example we check all the DAGs available by:
 
-```ls -ltr dags/```
+```sh
+ls -ltr dags/
+```
 
 ## References
 - [Airflow tutorial 4: Writing your first pipeline](https://www.youtube.com/watch?v=43wHwwZhJMo)
@@ -104,3 +109,4 @@ You can then inspect the environment, for example we check all the DAGs availabl
 - [Managing Connections](https://airflow.apache.org/docs/apache-airflow/stable/howto/connection.html)
 - [Keep TFIDF result for predicting new content using Scikit for Python](https://stackoverflow.com/questions/29788047/keep-tfidf-result-for-predicting-new-content-using-scikit-for-python)
 - [Multi-Class Text Classification with Scikit-Learn](https://towardsdatascience.com/multi-class-text-classification-with-scikit-learn-12f1e60e0a9f)
+- [MongoDB 3.2 authentication failed](https://stackoverflow.com/questions/42912755/how-to-create-a-db-for-mongodb-container-on-start-up)
