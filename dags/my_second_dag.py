@@ -1,12 +1,10 @@
-
 """
 My second dag.
 """
 
+# Step 1: Import libraries
 from datetime import datetime, timedelta
 from textwrap import dedent
-
-# Step 1: Import libraries
 from airflow import DAG
 from airflow.operators.bash import BashOperator
 

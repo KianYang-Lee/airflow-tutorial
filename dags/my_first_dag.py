@@ -2,12 +2,11 @@ from airflow.models import DAG
 from airflow.utils.dates import days_ago
 from airflow.operators.python_operator import PythonOperator
 args = {
-
     'owner': 'Kian Yang Lee',
     'start_date': days_ago(1)
 }
 
-dag = DAG(dag_id = 'my_first_dag', default_args=args, schedule_interval=None)
+dag = DAG(dag_id = 'my_first_dag', default_args=args, schedule_interval='0 0 * * *')
 
 
 def my_first_print():

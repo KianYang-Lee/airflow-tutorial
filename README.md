@@ -25,7 +25,9 @@ We are going to use Docker containers to spin up Airflow container as we also ne
 
 1. Clone this repo
 2. Configure host user id
-```echo -e "AIRFLOW_UID=$(id -u)" > .env```
+```
+echo -e "AIRFLOW_UID=$(id -u)\n_PIP_ADDITIONAL_REQUIREMENTS=pymongo pandas scikit-learn apache-airflow-providers-mongo" > .env
+```
 
 3. Initialize the database and create first user account
 ```docker-compose up airflow-init```
@@ -97,3 +99,8 @@ You can then inspect the environment, for example we check all the DAGs availabl
 - [Running Airflow in Docker](https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html)
 - [How to Run Your First Airflow DAG in Docker](https://predictivehacks.com/how-to-run-your-first-airflow-dag-in-docker/)
 - [Tutorial](https://airflow.apache.org/docs/apache-airflow/stable/tutorial.html)
+- [PostgreSQL Connection](https://airflow.apache.org/docs/apache-airflow-providers-postgres/stable/connections/postgres.html#howto-connection-postgres)
+- [Psycopg2: PostgreSQL & Python the Old Fashioned Way](https://hackersandslackers.com/psycopg2-postgres-python/)
+- [Managing Connections](https://airflow.apache.org/docs/apache-airflow/stable/howto/connection.html)
+- [Keep TFIDF result for predicting new content using Scikit for Python](https://stackoverflow.com/questions/29788047/keep-tfidf-result-for-predicting-new-content-using-scikit-for-python)
+- [Multi-Class Text Classification with Scikit-Learn](https://towardsdatascience.com/multi-class-text-classification-with-scikit-learn-12f1e60e0a9f)

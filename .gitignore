@@ -129,4 +129,11 @@ dmypy.json
 .pyre/
 
 # Airflow
-/logs/
+logs/
+plugins/
+
+# mongodb
+mongo_data
+
+# binary files
+*.pkl

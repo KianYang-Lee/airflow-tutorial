@@ -5,11 +5,13 @@ removing duplicate rows while populating the table.
 """
 
 from airflow.decorators import dag, task
+from airflow.hooks.postgres_hook import PostgresHook
 from datetime import datetime, timedelta
 import requests
 
+
 @dag(
-    dag_id="my_postgres_dag",
+    dag_id="my_ETL_dag",
     schedule_interval="0 0 * * *",
     start_date=datetime.today() - timedelta(days=2),
     dagrun_timeout=timedelta(minutes=60),
@@ -21,25 +23,17 @@ def Etl():
 
         response = requests.request("GET", url)
 
-        with open("/usr/local/airflow/dags/files/employees.csv", "w") as file:
-            for row in response.text.split("\n"):
-                file.write(row)
+        with open("/opt/airflow/dags/files/employees.csv", "w") as file:
+            file.write(response.text)
 
         postgres_hook = PostgresHook(postgres_conn_id="LOCAL")
         conn = postgres_hook.get_conn()
         cur = conn.cursor()
-        with open("/usr/local/airflow/dags/files/employees.csv", "r") as file:
-            cur.copy_from(
-                f,
-                "Employees_temp",
-                columns=[
-                    "Serial Number",
-                    "Company Name",
-                    "Employee Markme",
-                    "Description",
-                    "Leave",
-                ],
-                sep=",",
+        with open("/opt/airflow/dags/files/employees.csv", "r") as file:
+            # next(file)  # Skip the header
+            cur.copy_expert(
+                sql="COPY employees_temp FROM STDIN WITH DELIMITER ',' CSV HEADER QUOTE '\"'",
+                file=file,
             )
         conn.commit()
 
@@ -47,12 +41,12 @@ def Etl():
     def merge_data():
         query = """
                 delete
-                from "Employees" e using "Employees_temp" et
+                from employees e using employees_temp et
                 where e."Serial Number" = et."Serial Number";
 
-                insert into "Employees"
+                insert into employees
                 select *
-                from "Employees_temp";
+                from employees_temp;
                 """
         try:
             postgres_hook = PostgresHook(postgres_conn_id="LOCAL")
