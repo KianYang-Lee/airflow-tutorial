@@ -23,7 +23,7 @@ A slide deck which provides brief introduction on what is Apache Airflow, why us
 ## Getting Started
 We are going to use Docker containers to spin up Airflow container as we also need to spin up container for other services. Follow the steps below to get Apache Airflow up and running using Docker container:
 
-1. Clone this repo.
+1. Clone this repo and `cd` into this repo's root.
 2. Configure host user id, additional Python packages and directories:
 
 ```sh
