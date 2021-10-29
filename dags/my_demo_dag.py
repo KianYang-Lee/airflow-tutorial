@@ -5,7 +5,7 @@ from data_scrapper import scrap_joke
 from model_trainer import inference, generate_model
 from datetime import datetime
 
-args = {"owner": "Kian Yang Lee", "start_date": datetime(2021, 10, 30, 3, 0, 0)}
+args = {"owner": "Kian Yang Lee", "start_date": datetime(2021, 10, 29, 3, 0, 0)}
 
 dag = DAG(dag_id="my_demo_dag", default_args=args, schedule_interval="*/1 * * * *")
 
