@@ -7,17 +7,18 @@ from datetime import datetime, timedelta
 from textwrap import dedent
 from airflow import DAG
 from airflow.operators.bash import BashOperator
+from airflow.operators.email import EmailOperator
 
 # Step 2: Configure default arguments
 #   These args will get passed on to each operator and can be overrided
 default_args = {
-    'owner': 'Kian Yang Lee',
-    'depends_on_past': False,
-    'email': ['kianyang.lee@certifai.ai'],
-    'email_on_failure': False,
-    'email_on_retry': False,
-    'retries': 1,
-    'retry_delay': timedelta(minutes=5),
+    "owner": "Kian Yang Lee",
+    "depends_on_past": False,
+    "email": ["kianyang.lee@certifai.ai"],
+    "email_on_failure": False,
+    "email_on_retry": False,
+    "retries": 1,
+    "retry_delay": timedelta(minutes=5),
     # 'queue': 'bash_queue',
     # 'pool': 'backfill',
     # 'priority_weight': 10,
@@ -35,27 +36,26 @@ default_args = {
 
 # Step 3: Instantiate DAG object
 with DAG(
-    'my_second_dag',
+    "my_second_dag",
     default_args=default_args,
-    description='A simple tutorial DAG',
-    schedule_interval=timedelta(days=1),
+    description="A simple tutorial DAG",
+    schedule_interval="@daily",  # Either datetime, cron or cron presets
     start_date=datetime(2021, 1, 1),
-    catchup=False,
-    tags=['example'],
+    catchup=False,  # This disables past tasks from being executed
+    tags=["my_second_dag"],
 ) as dag:
-
 
     # Step 4: Configure tasks by instantiating operators
     #   An object instantiated from operators is called a task
     task_1 = BashOperator(
-        task_id='print_date',
-        bash_command='date',
+        task_id="print_date",
+        bash_command="date",
     )
 
     task_2 = BashOperator(
-        task_id='sleep',
+        task_id="sleep",
         depends_on_past=False,
-        bash_command='sleep 5',
+        bash_command="sleep 5",
         retries=3,
     )
     task_1.doc_md = dedent(
@@ -73,7 +73,7 @@ with DAG(
     dag.doc_md = """
     This is a documentation placed at the middle of module.
     """  # otherwise, specify it this way
-    
+
     # Jinja templating
     templated_command = dedent(
         """
@@ -86,10 +86,10 @@ with DAG(
     )
 
     task_3 = BashOperator(
-        task_id='Jinja_template',
+        task_id="Jinja_template",
         depends_on_past=False,
         bash_command=templated_command,
-        params={'my_param': 'My params are awesome'},
+        params={"my_param": "My params are awesome"},
     )
 
     # Step 5: Configure tasks dependencies

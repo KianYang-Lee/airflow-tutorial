@@ -3,10 +3,11 @@ from airflow.utils.dates import days_ago
 from airflow.operators.python_operator import PythonOperator
 from data_scrapper import scrap_joke
 from model_trainer import inference, generate_model
+from datetime import datetime
 
-args = {"owner": "Kian Yang Lee", "start_date": days_ago(1)}
+args = {"owner": "Kian Yang Lee", "start_date": datetime(2021, 10, 30, 3, 0, 0)}
 
-dag = DAG(dag_id="my_demo_dag", default_args=args, schedule_interval="0 * * * *")
+dag = DAG(dag_id="my_demo_dag", default_args=args, schedule_interval="*/1 * * * *")
 
 with dag:
     scrap_joke_task = PythonOperator(

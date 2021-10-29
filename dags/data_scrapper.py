@@ -40,19 +40,19 @@ def serialize_joke(joke: dict):
         # uri = "mongodb://root:example@mongo:27017"  # this works
         uri = "mongodb://airflow:airflow@mongo:27017"  # this works too
         # uri = "mongodb://airflow:airflow@localhost:3456" # but this does not work
-        # client = MongoClient(uri)
-        # db = client.the_database
-        # collection = db.jokes
-        # result = collection.insert_one(joke)
-        # print(f"{result.inserted_id} is inserted!")
-
-        # Using MongoHook wrapper
-        mongo_hook = MongoHook(conn_id="MONGO")
-        client = mongo_hook.get_conn()
+        client = MongoClient(uri)
         db = client.the_database
         collection = db.jokes
         result = collection.insert_one(joke)
         print(f"{result.inserted_id} is inserted!")
+
+        # Using MongoHook wrapper
+        # mongo_hook = MongoHook(conn_id="MONGO")
+        # client = mongo_hook.get_conn()
+        # db = client.the_database
+        # collection = db.jokes
+        # result = collection.insert_one(joke)
+        # print(f"{result.inserted_id} is inserted!")
 
 
 def scrap_joke():
